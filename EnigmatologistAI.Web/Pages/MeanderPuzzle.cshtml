@@ -1,0 +1,33 @@
+﻿@page
+@model EnigmatologistAI.Web.Pages.MeanderPuzzleModel
+@{
+    ViewData["Title"] = "MeanderPuzzle";
+}
+
+<h1>Meander Puzzle</h1>
+<form id="optionsForm" class="form-inline">
+    <label asp-for="NumberOfPoints">Number of points: </label>
+    <select asp-for="NumberOfPoints" class="form-control" onchange="this.form.submit()">
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+    </select>
+</form>
+<p>
+    <strong>Total Permutations:</strong> @Model.Puzzle.Permutations.Count()
+    <strong>Valid:</strong> @Model.Puzzle.Permutations.Count(p => p.IsValid)
+    <strong>Invalid:</strong> @Model.Puzzle.Permutations.Count(p => !p.IsValid)
+</p>
+<div class="card-columns">
+    @foreach(var permutation in Model.Puzzle.Permutations)
+    {
+    <div class="card">
+        <div class="card-body @(permutation.IsValid ? "valid" : "invalid")">
+            <h5 class="card-title">@permutation.MeanderOrderString</h5>
+        </div>
+        @Html.Raw(@permutation.GetSvg())
+    </div>
+    }
+</div>
